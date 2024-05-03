@@ -16,6 +16,7 @@ const { Pool } = require('pg');
 const { getDoiDataFromDB } = require('./doiServices'); // 确保路径正确
 const { getGeneDataFromDB } = require('./doiServices');
 const { getOrganismDataFromDB} = require('./doiServices');
+const { getProductDataFromDB } = require('./doiServices');
 
 // 配置 PostgreSQL 连接池
 const pool = new Pool({
@@ -28,8 +29,8 @@ const pool = new Pool({
 
 async function testGetGeneData() {
   try {
-    const orgName = 'TA1317'; // 使用一个已知存在于数据库的DOI
-    const result = await getOrganismDataFromDB(orgName, pool);
+    const productName = 'isopropanol'; // 使用一个已知存在于数据库的DOI
+    const result = await getProductDataFromDB(productName, pool);
     console.log('Result:', result);
   } catch (error) {
     console.error('Failed to fetch DOI details:', error);

@@ -101,7 +101,7 @@
               </li>
               <li>
                 Product (e.g.
-                <router-link to="/exampleroute/product/Glucose">CCO</router-link>
+                <router-link to="/exampleroute/product/isopropanol">Isopropanol</router-link>
                 )
               </li>
             </ul>

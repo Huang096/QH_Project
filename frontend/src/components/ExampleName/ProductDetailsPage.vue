@@ -34,7 +34,7 @@
           </div>
         </div>
         <div v-else>
-          <h3 class="title is-3">Product:  {{ staticInfo.name }}</h3>
+          <h3 class="title is-3">Product:  {{ productInfo.product }}</h3>
           <div class="columns">
             <div class="table-template column is-8-desktop">
               <div class="table-container">
@@ -43,19 +43,19 @@
                     <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                       Cross reference ID
                     </td>
-                    <td>{{ staticInfo.crossReferenceID }}</td>
+                    <td>{{ productInfo.crossrefid }}</td>
                   </tr>
                   <tr>
                     <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                       MetaNetx
                     </td>
-                    <td>{{ staticInfo.metaNetx }}</td>
+                    <td>{{ productInfo.meta }}</td>
                   </tr>
                   <tr>
                     <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                       SMILLS
                     </td>
-                    <td>{{ staticInfo.smills }}</td>
+                    <td>{{ productInfo.smills }}</td>
                   </tr>
                 </table>
               </div>
@@ -150,19 +150,34 @@
     </div>
   </template>
 
-  <script>
-  export default {
-    name: 'ProductDetailsPage',
-    data() {
-      return {
-        staticInfo: {
-          name: 'Glucose',
-          crossReferenceID: 'C0005',
-          metaNetx: 'MNXM',
-          smills: 'C(C1C(C(C(C(O1)O)O)O)O)O'
-        },
-        // 其他静态数据
-      };
-    },
-  };
-  </script>
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'ProductPage',
+  data() {
+    return {
+      productInfo: null, // 用于存储product的详细信息
+      notFound: false,
+    };
+  },
+  created() {
+    this.fetchProductData();
+  },
+  methods: {
+    fetchProductData() {
+      const apiUrl = `http://localhost:3000/api/product/isopropanol`;
+      axios.get(apiUrl)
+        .then(response => {
+          console.log("Complete response received:", response.data);
+          this.productInfo = response.data.productInfo; // 直接使用 response.data.keggRef
+          this.notFound = false;
+        })
+        .catch(error => {
+          console.error('Error fetching gene details:', error);
+          this.notFound = true;
+        });
+    }
+  }
+};
+</script>
