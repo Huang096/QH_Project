@@ -30,6 +30,13 @@ import EnzymeLanding from '@/components/gotEnzymes/Landing.vue';
 import EnzymeOrganism from '@/components/gotEnzymes/Organism.vue';
 import EnzymeDomain from '@/components/gotEnzymes/Domain.vue';
 import EnzymeGene from '@/components/gotEnzymes/Gene.vue';
+import ExampleNameLanding from '@/components/ExampleName/ExampleNameLanding.vue';
+import DoiPage from '@/components/ExampleName/DoiPage.vue';
+import OrganismPage from '@/components/ExampleName/OrganismPage.vue';
+import GenePage from '@/components/ExampleName/GenePage.vue';
+import ProductPage from '@/components/ExampleName/ProductPage.vue';
+
+
 
 const routes = [
   { path: '/', name: 'home', component: Home },
@@ -93,6 +100,16 @@ const routes = [
       { path: 'organism/:id', name: 'gotenzymes-organism', component: EnzymeOrganism },
       { path: 'domain/:id', name: 'gotenzymes-domain', component: EnzymeDomain },
     ],
+  },
+  {
+    path:'/exampleroute',
+    children: [
+      { path: '', name: 'exampleroute', component: ExampleNameLanding},
+      { path: 'doi/:id', name: 'exampleroute-doi', component: DoiPage},
+      { path: 'organism/:name', name: 'exampleroute-organism', component: OrganismPage},
+      { path: 'gene/:name', name: 'exampleroute-gene', component: GenePage},
+      { path: 'product/:name', name: 'exampleroute-product', component: ProductPage}
+    ]
   },
 
   // redirects

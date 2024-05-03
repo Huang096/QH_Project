@@ -75,8 +75,8 @@
                       class="navbar-link is-active-underline"
                       :class="{
                         'router-link-active': menuElem.subMenuElems
-                          .map(sme => sme.routeName)
-                          .includes($route.name),
+                        .map(sme => sme.routeName)
+                        .includes($route.name),
                       }"
                     >
                       {{ menuElem.displayName }}
@@ -248,6 +248,10 @@ export default {
         {
           displayName: 'GotEnzymes',
           routeName: 'gotenzymes',
+        },
+        {
+          displayName: 'ExampleName',
+          routeName: 'exampleroute',
         },
         {
           displayName: 'Documentation',

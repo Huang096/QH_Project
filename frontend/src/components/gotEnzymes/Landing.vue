@@ -34,8 +34,7 @@
                 <div v-if="searchResults.length === 0" class="p-3">
                   {{ messages.searchNoResult }} for
                   <b>
-                    <i>{{ searchTerm }}</i> </b
-                  >.
+                    <i>{{ searchTerm }}</i> </b>.
                 </div>
                 <ul v-else>
                   <li v-for="(r, i) in searchResults" :key="i">
