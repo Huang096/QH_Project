@@ -18,6 +18,7 @@ const cors = require('cors');
 // eslint-disable-next-line import/extensions
 const { getDoiDataFromDB } = require('./src/ExampleName/services/doiServices');
 const { getGeneDataFromDB } = require('./src/ExampleName/services/doiServices');
+const { getOrganismDataFromDB} = require('./src/ExampleName/services/doiServices')
 
 // 创建 Express 应用实例
 const app = express();
@@ -65,6 +66,24 @@ app.get('/api/gene/:name', async (req, res) => {
     }
   } catch (error) {
     console.error('Error fetching gene details:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.get('/api/organism/:name', async (req, res) => {
+  console.log('API /api/gene/:name called with name:', req.params.name); // 确认路由被调用
+  try {
+    const name = decodeURIComponent(req.params.name);
+    console.log('Received ORGANISM name:', name); // 输出解码后的名称
+    const geneDetail = await getOrganismDataFromDB(name, pool);
+    console.log('Gene Detail:', geneDetail); // 输出获取的详情
+    if (geneDetail) {
+      res.json(geneDetail);
+    } else {
+      res.status(404).json({ message: 'Organism not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching organism details:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });

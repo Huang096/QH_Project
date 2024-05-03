@@ -11,3 +11,27 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+const express = require('express');
+const { getOrganismDataFromDB } = require('./services/doiServices'); // 确保路径正确
+
+const router = express.Router();
+
+router.get('/organism/:name', async (req, res) => {
+  try {
+    const name = decodeURIComponent(req.params.name);
+    console.log('Received GENE:', req.params.name); // 查看原始接收的DOI
+    // console.log('Decoded DOI:', name); 查看解码后的DOI
+    const orgDetail = await getOrganismDataFromDB(name);
+    console.log('Article Detail:', orgDetail); // 打印查询结果
+    if (orgDetail) {
+      res.json(orgDetail);
+    } else {
+      res.status(404).send('DOI not found');
+    }
+  } catch (error) {
+    console.error('Error fetching GENE details:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+module.exports = router;

@@ -65,7 +65,28 @@ async function getGeneDataFromDB(productName, pool) {
     }
 }
 
+async function getOrganismDataFromDB(orgName, pool) {
+    try {
+        const organismQuery = 'SELECT * FROM orginfo WHERE TRIM(strain) = TRIM($1)';
+        const organismResults = await pool.query(organismQuery, [orgName]);
+
+        // 组合结果
+        const orgInfo = organismResults.rows[0]; // 取第一条记录
+
+        // console.log("Article data:", article);
+        // console.log("Article additional data:", articleData);
+
+        return {
+            orgInfo,
+        };
+    } catch (err) {
+        console.error('Error executing query', err.stack);
+        throw err; // 传递错误以便可以进一步处理
+    }
+}
+
 module.exports = {
     getDoiDataFromDB,
-    getGeneDataFromDB
+    getGeneDataFromDB,
+    getOrganismDataFromDB
 };

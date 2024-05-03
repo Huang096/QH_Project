@@ -30,7 +30,7 @@
         </div>
       </div>
       <div v-else>
-        <h3 class="title is-3">Organism: {{ staticInfo.name }}</h3>
+        <h3 class="title is-3">Organism: {{ orgInfo.strain }}</h3>
         <div class="columns">
           <div class="table-template column is-8-desktop">
             <div class="table-container">
@@ -39,37 +39,37 @@
                   <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                     Kegg reference
                   </td>
-                  <td>{{ staticInfo.keggReference }}</td>
+                  <td>{{ orgInfo. keggref}}</td>
                 </tr>
                 <tr>
                   <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                     Tax ID
                   </td>
-                  <td>{{ staticInfo.taxID }}</td>
+                  <td>{{ orgInfo.taxid }}</td>
                 </tr>
                 <tr>
                   <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                     Domain:
                   </td>
-                  <td>{{ staticInfo.domain }}</td>
+                  <td>{{ orgInfo.domain }}</td>
                 </tr>
                 <tr>
                   <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                     Phylum:
                   </td>
-                  <td>{{ staticInfo.phylum }}</td>
+                  <td>{{ orgInfo.phylum }}</td>
                 </tr>
                 <tr>
                   <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                     Class:
                   </td>
-                  <td>{{ staticInfo.class }}</td>
+                  <td>{{ orgInfo.class }}</td>
                 </tr>
                 <tr>
                   <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                     Order:
                   </td>
-                  <td>{{ staticInfo.order }}</td>
+                  <td>{{ orgInfo.order }}</td>
                 </tr>
               </table>
             </div>
@@ -165,21 +165,33 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
-  name: 'DetailsPage',
+  name: 'OrganismPage',
   data() {
     return {
-      staticInfo: {
-        name: 'E.coli',
-        keggReference: 'T30192 (Metagenome):99053',
-        taxID: '562 (for references in articles please use NCBI:txid562)',
-        domain: 'Bacteria',
-        phylum: 'Pseudomonadota',
-        class: 'Gammaproteobacteria',
-        order: 'Enterobacterales'
-      },
-      // 其他静态数据
+      orgInfo: null, // 用于存储keggRef的详细信息
+      notFound: false,
     };
   },
+  created() {
+    this.fetchOrgData();
+  },
+  methods: {
+    fetchOrgData() {
+      const apiUrl = `http://localhost:3000/api/organism/TA1317`;
+      axios.get(apiUrl)
+        .then(response => {
+          console.log("Complete response received:", response.data);
+          this.orgInfo = response.data.orgInfo; // 直接使用 response.data.keggRef
+          this.notFound = false;
+        })
+        .catch(error => {
+          console.error('Error fetching gene details:', error);
+          this.notFound = true;
+        });
+    }
+  }
 };
 </script>
