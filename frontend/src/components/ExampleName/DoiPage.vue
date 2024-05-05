@@ -42,7 +42,7 @@ License for the specific language governing permissions and // limitations under
           </div>
         </div>
         <article-card v-for="dataEntry in data" :key="dataEntry.id" :article-data="dataEntry"></article-card>
-
+        <gene-table :genes="[{ id: '001', gene: 'TestGene1', description: 'Test Description' }]" :columns="[{ label: 'ID', field: 'id' }, { label: 'Gene', field: 'gene' }, { label: 'Description', field: 'description' }]"></gene-table>
       </div>
     </div>
   </div>
@@ -51,17 +51,27 @@ License for the specific language governing permissions and // limitations under
 <script>
 import axios from 'axios';
 import ArticleCard from './articleCard.vue';
+import GeneTable from './table.vue';
 
 export default {
   name: 'DetailsPage',
   components: {
-    ArticleCard
+    ArticleCard,
+    'gene-table':GeneTable
   },
   data() {
     return {
       article: null,
-      data: [],
       notFound: false,
+      genesData: [
+        { id: '001', gene: 'TestGene1', description: 'Description for TestGene1' },
+        { id: '002',gene: 'TestGene2', description: 'Description for TestGene2' }
+      ],
+      columnsData: [
+        { label: 'ID', field: 'id' },
+        { label: 'Gene', field: 'gene' },
+        { label: 'Description', field: 'description' }
+      ]
     };
   },
   created() {
@@ -78,6 +88,8 @@ export default {
           if(response.data.article){
             console.log("Article details received:", response.data.article);
             console.log("Data entries received:", response.data.data);
+            console.log('Genes Data:', this.genesData);
+            console.log('Columns Data:', this.columnsData);
             this.article = response.data.article;
             this.data = response.data.data;
           }else{

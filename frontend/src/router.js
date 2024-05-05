@@ -30,11 +30,13 @@ import EnzymeLanding from '@/components/gotEnzymes/Landing.vue';
 import EnzymeOrganism from '@/components/gotEnzymes/Organism.vue';
 import EnzymeDomain from '@/components/gotEnzymes/Domain.vue';
 import EnzymeGene from '@/components/gotEnzymes/Gene.vue';
+
 import ExampleNameLanding from '@/components/ExampleName/ExampleNameLanding.vue';
 import DoiPage from '@/components/ExampleName/DoiPage.vue';
 import OrganismPage from '@/components/ExampleName/OrganismPage.vue';
 import GenePage from '@/components/ExampleName/GenePage.vue';
 import ProductPage from '@/components/ExampleName/ProductPage.vue';
+import testGeneTable from './testTable.vue'
 
 
 
@@ -111,6 +113,13 @@ const routes = [
       { path: 'product/:name', name: 'exampleroute-product', component: ProductPage}
     ]
   },
+  /*
+  {
+    path: '/test-gene-table',
+    name: 'testGeneTable',
+    component: testGeneTable
+  },
+  */
 
   // redirects
   {
