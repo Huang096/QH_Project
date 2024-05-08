@@ -33,7 +33,13 @@
       style-class="vgt-table striped"
     >
       <template v-slot:table-row="{ row, column }">
-        <span v-if="column.field === 'link'">
+        <span v-if="column.field === 'gene'">
+          <!-- 特殊处理 gene 列 -->
+          <span v-for="geneInfo in row.gene" :key="geneInfo.type" :style="{ color: getGeneColor(geneInfo.type) }">
+            {{ geneInfo.value }}<span v-if="geneInfo !== row.gene[row.gene.length - 1]">; </span>
+          </span>
+        </span>
+        <span v-else-if="column.field === 'link'">
           <router-link :to="`/genes/${row[column.field]}`">{{ row[column.field] }}</router-link>
         </span>
         <span v-else>
@@ -61,6 +67,16 @@ export default {
     columns: {
       type: Array,
       required: true
+    }
+  },
+  methods: {
+    getGeneColor(type) {
+      switch (type) {
+        case 'Knock Out': return 'red';
+        case 'Overexpress': return 'blue';
+        case 'Heterologous': return 'green';
+        default: return 'black'; // 提供默认颜色，防止未识别类型
+      }
     }
   },
   mounted() {

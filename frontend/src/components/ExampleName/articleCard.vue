@@ -13,114 +13,102 @@
 // limitations under the License.
 
 <template>
-    <div class = "card">
-        <div class = "card-content">
-            <div class = "content">
-                <table class = "table is-fullwidth">
-                    <tbody>
-                        <tr>
-                            <th>Strain:</th>
-                            <td>{{ articleData.strain || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Strain Type:</th>
-                            <td>{{ articleData.strain_type || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Product:</th>
-                            <td>{{ articleData.product || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Product Tilter:</th>
-                            <td>{{ articleData.product_tilter || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Carbon Source:</th>
-                            <td>{{ articleData.carbon_source || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Carbon Source Concentration:</th>
-                            <td>{{ articleData.carbon_source_concentration || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Vessel and Feed Mode:</th>
-                            <td>{{ articleData.vessel_and_feed_mode || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>PH:</th>
-                            <td>{{ articleData.ph || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Time:</th>
-                            <td>{{ articleData.time || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Temperature:</th>
-                            <td>{{ articleData.temperature || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Parent Strain:</th>
-                            <td>{{ articleData.parent_strain || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Knock Out Gene:</th>
-                            <td>{{ articleData.knock_out_gene || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Overexpress Gene:</th>
-                            <td>{{ articleData.overexpress_gene || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Heterologous Gene:</th>
-                            <td>{{ articleData.heterologous_gene || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Medium:</th>
-                            <td>{{ articleData.medium || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>SMILES_in:</th>
-                            <td>{{ articleData.SMILES_in || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Article Title:</th>
-                            <td>{{ articleData.Article_Title || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Publication Year:</th>
-                            <td>{{ articleData.Publication_Year || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Tilter Unit:</th>
-                            <td>{{ articleData.titer_unit || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Tilter Value:</th>
-                            <td>{{ articleData.titer_value || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Standard Smiles:</th>
-                            <td>{{ articleData.standard_smiles || 'NA' }}</td>
-                        </tr>
-                        <tr>
-                            <th>SMILES_in:</th>
-                            <td>{{ articleData.SMILES_in || 'NA' }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+    <div class="card">
+      <div class="card-content">
+        <div class="content">
+            <table class="table is-fullwidth">
+                <tbody>
+                    <tr v-for="(item, index) in leftColumn" :key="`left-${index}`">
+                    <th>{{ item.label }}:</th>
+                    <td>{{ item.value }}</td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr v-for="(item, index) in rightColumn" :key="`right-${index}`">
+                    <th>{{ item.label }}:</th>
+                    <td>{{ item.value }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
         </div>
+      </div>
     </div>
-</template>
+  </template>
+  
 
 <script>
-    export default{
-        name: 'ArticleCard',
-        props:{
-            articleData:{
-                type: Object,
-                required: true
-            }
+export default {
+    name: 'ArticleCard',
+    props: {
+        articleData: {
+            type: Object,
+            required: true
+        }
+    },
+    computed: {
+        leftColumn() {
+            // 获取所有键，然后选取前13个键形成左列
+            return Object.entries(this.articleData)
+            .slice(0, 13)
+            .map(([key, value]) => ({
+                label: this.formatLabel(key),
+                value: value || 'NA'
+            }));
+        },
+        rightColumn() {
+            // 获取所有键，选取第14个键到第26个键形成右列
+            return Object.entries(this.articleData)
+            .slice(13)
+            .map(([key, value]) => ({
+                label: this.formatLabel(key),
+                value: value || 'NA'
+            }));
+        }
+    },
+    methods: {
+        formatLabel(key) {
+            return key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         }
     }
+
+}
 </script>
+
+<style scoped>
+.card {
+    border: 2px solid #ccc;  /* 灰色粗边框 */
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);  /* 轻微的阴影 */
+    margin-bottom: 20px;  /* 每张卡片底部的间距 */
+    background: white;  /* 白色背景 */
+    border-radius: 20px;
+}
+.card-content {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 20px 0;
+}
+tbody {
+    display: table-cell;
+    vertical-align: top;
+}
+
+th, td {
+    vertical-align: top;
+    padding: 8px;
+}
+
+th {
+    white-space: nowrap;
+    width: 1%;
+}
+td {
+    width: auto;
+}
+</style>

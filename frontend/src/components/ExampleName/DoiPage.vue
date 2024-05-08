@@ -41,8 +41,8 @@ License for the specific language governing permissions and // limitations under
             </div>
           </div>
         </div>
-        <article-card v-for="dataEntry in data" :key="dataEntry.id" :article-data="dataEntry"></article-card>
-        <gene-table :genes="[{ id: '001', gene: 'TestGene1', description: 'Test Description' }]" :columns="[{ label: 'ID', field: 'id' }, { label: 'Gene', field: 'gene' }, { label: 'Description', field: 'description' }]"></gene-table>
+        <article-card v-for="dataEntry in cardData" :key="dataEntry.id" :article-data="dataEntry"></article-card>
+        <gene-table :genes = genesData :columns = columnsData></gene-table>
       </div>
     </div>
   </div>
@@ -63,14 +63,14 @@ export default {
     return {
       article: null,
       notFound: false,
-      genesData: [
-        { id: '001', gene: 'TestGene1', description: 'Description for TestGene1' },
-        { id: '002',gene: 'TestGene2', description: 'Description for TestGene2' }
-      ],
+      genesData: [],
       columnsData: [
-        { label: 'ID', field: 'id' },
+        { label: 'Doi', field: 'doi' },
+        { label: 'Organism', field: 'organism' },
         { label: 'Gene', field: 'gene' },
-        { label: 'Description', field: 'description' }
+        { label: 'Product', field: 'product' },
+        { label: 'Product tilter', field: 'product_tilter' },
+        { label: 'Time', field: 'time' },
       ]
     };
   },
@@ -91,7 +91,19 @@ export default {
             console.log('Genes Data:', this.genesData);
             console.log('Columns Data:', this.columnsData);
             this.article = response.data.article;
-            this.data = response.data.data;
+            this.cardData = response.data.data;
+            this.genesData = response.data.data.map(entry => ({
+              doi: entry.doi,
+              gene: [
+                { type: 'Knock Out', value: entry.knock_out_gene || 'NA' },
+                { type: 'Overexpress', value: entry.overexpress_gene || 'NA' },
+                { type: 'Heterologous', value: entry.heterologous_gene || 'NA' }
+              ],
+              organism: entry.organism,
+              product: entry.product,
+              product_tilter: entry.product_titer,
+              time: entry.time
+            }));
           }else{
             this.notFound = true;
           }
