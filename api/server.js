@@ -76,10 +76,10 @@ app.get('/api/organism/:name', async (req, res) => {
   try {
     const name = decodeURIComponent(req.params.name);
     console.log('Received ORGANISM name:', name); // 输出解码后的名称
-    const productDetail = await getOrganismDataFromDB(name, pool);
-    console.log('Gene Detail:', productDetail); // 输出获取的详情
-    if (productDetail) {
-      res.json(productDetail);
+    const organismDetail = await getOrganismDataFromDB(name, pool);
+    console.log('Organism Detail:', organismDetail); // 输出获取的详情
+    if (organismDetail) {
+      res.json(organismDetail);
     } else {
       res.status(404).json({ message: 'Organism not found' });
     }

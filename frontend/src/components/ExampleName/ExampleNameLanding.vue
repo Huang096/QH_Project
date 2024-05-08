@@ -96,7 +96,7 @@
               </li>
               <li>
                 Organism (e.g.
-                <router-link to="/exampleroute/organism/TA1317">TA1317</router-link>
+                <router-link to="/exampleroute/organism/Org1">Org1</router-link>
                 )
               </li>
               <li>

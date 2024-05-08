@@ -67,17 +67,22 @@ async function getGeneDataFromDB(productName, pool) {
 
 async function getOrganismDataFromDB(orgName, pool) {
     try {
-        const organismQuery = 'SELECT * FROM orginfo WHERE TRIM(strain) = TRIM($1)';
+        const organismQuery = 'SELECT * FROM orginfo WHERE TRIM(organism) = TRIM($1)';
         const organismResults = await pool.query(organismQuery, [orgName]);
+
+        const dataQuery = 'SELECT * FROM data WHERE TRIM(organism) = TRIM($1)';
+        const dataResults = await pool.query(dataQuery, [orgName]);
+
+        console.log('Organism Results:', organismResults.rows);
+        console.log('Data Results:', dataResults.rows);
 
         // 组合结果
         const orgInfo = organismResults.rows[0]; // 取第一条记录
-
-        // console.log("Article data:", article);
-        // console.log("Article additional data:", articleData);
+        const orgData = dataResults.rows;
 
         return {
-            orgInfo,
+          orgInfo,
+          data: orgData,
         };
     } catch (err) {
         console.error('Error executing query', err.stack);
