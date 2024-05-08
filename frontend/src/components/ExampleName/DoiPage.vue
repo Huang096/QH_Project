@@ -41,6 +41,16 @@ License for the specific language governing permissions and // limitations under
             </div>
           </div>
         </div>
+        <div class="field columns">
+          <div class="column"></div>
+          <div class="column is-narrow">
+            <ExportTSV
+              :filename="`Doi for ${article?.doi}.tsv`"
+              :format-function="formatToTSV"
+              :disabled="!genesData.length"
+            ></ExportTSV>
+          </div>
+        </div>
         <article-card v-for="dataEntry in cardData" :key="dataEntry.id" :article-data="dataEntry"></article-card>
         <gene-table :genes = genesData :columns = columnsData></gene-table>
       </div>
@@ -52,12 +62,14 @@ License for the specific language governing permissions and // limitations under
 import axios from 'axios';
 import ArticleCard from './articleCard.vue';
 import GeneTable from './table.vue';
+import ExportTSV from '@/components/shared/ExportTSV.vue';
 
 export default {
   name: 'DetailsPage',
   components: {
     ArticleCard,
-    'gene-table':GeneTable
+    'gene-table':GeneTable,
+    ExportTSV,
   },
   data() {
     return {
@@ -112,6 +124,19 @@ export default {
           console.error('Error fetching article details:', error);
           this.notFound = true;
         });
+    },
+    formatToTSV() {
+      let tsvContent = this.columnsData.map(col => col.label).join('\t') + '\n'; // 创建标题行
+      tsvContent += this.genesData.map(entry => {
+        return this.columnsData.map(column => {
+          if (column.field === 'gene') {
+            return entry.gene.map(g => `${g.type}: ${g.value}`).join('; ');
+          } else {
+            return entry[column.field];
+          }
+        }).join('\t');
+      }).join('\n');
+      return tsvContent;
     }
   }
 };
