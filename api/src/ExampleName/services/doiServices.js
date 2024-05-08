@@ -90,14 +90,16 @@ async function getProductDataFromDB(productName, pool) {
         const productQuery = 'SELECT * FROM productinfo WHERE TRIM(product) = TRIM($1)';
         const productResults = await pool.query(productQuery, [productName]);
 
+        const dataQuery = 'SELECT * FROM data WHERE TRIM(product) = TRIM($1)';
+        const dataResults = await pool.query(dataQuery, [productName]);
+
         // 组合结果
         const productInfo = productResults.rows[0]; // 取第一条记录
-
-        // console.log("Article data:", article);
-        // console.log("Article additional data:", articleData);
+        const productData = dataResults.rows;
 
         return {
-            productInfo
+          productInfo,
+          data: productData,
         };
     } catch (err) {
         console.error('Error executing query', err.stack);

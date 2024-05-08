@@ -20,7 +20,6 @@ router.get('/product/:name', async (req, res) => {
   try {
     const name = decodeURIComponent(req.params.name);
     console.log('Received GENE:', req.params.name); // 查看原始接收的DOI
-    // console.log('Decoded DOI:', name); 查看解码后的DOI
     const productDetail = await getProductDataFromDB(name);
     console.log('Article Detail:', productDetail); // 打印查询结果
     if (productDetail) {

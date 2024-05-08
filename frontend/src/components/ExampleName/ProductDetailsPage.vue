@@ -34,7 +34,7 @@
           </div>
         </div>
         <div v-else>
-          <h3 class="title is-3">Product:  {{ productInfo.product }}</h3>
+          <h3 class="title is-3">Product:  {{ productInfo ? productInfo.product : '' }}</h3>
           <div class="columns">
             <div class="table-template column is-8-desktop">
               <div class="table-container">
@@ -43,122 +43,64 @@
                     <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                       Cross reference ID
                     </td>
-                    <td>{{ productInfo.crossrefid }}</td>
+                    <td>{{ productInfo?.crossrefid }}</td>
                   </tr>
                   <tr>
                     <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                       MetaNetx
                     </td>
-                    <td>{{ productInfo.meta }}</td>
+                    <td>{{ productInfo?.meta }}</td>
                   </tr>
                   <tr>
                     <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                       SMILLS
                     </td>
-                    <td>{{ productInfo.smills }}</td>
+                    <td>{{ productInfo?.smills }}</td>
                   </tr>
                 </table>
               </div>
             </div>
           </div>
         </div>
-        <h3 class="title is-3">Test Search Table</h3>
-      <!-- 新静态表格 -->
-      <div class="columns">
-        <div class="table-template column is-8-desktop">
-          <div class="table-container">
-            <table class="table main-table is-fullwidth vgt-table striped">
-              <!-- 表头 -->
-              <thead>
-                <tr>
-                  <th class="has-background-primary has-text-black">Gene</th>
-                  <th class="has-background-primary has-text-black">Organism</th>
-                  <th class="has-background-primary has-text-black">Domain</th>
-                  <th class="has-background-primary has-text-black">Reaction</th>
-                  <th class="has-background-primary has-text-black">Compound</th>
-                  
-                </tr>
-                <tr>
-                  <!-- New filter input fields -->
-                  <th><input type="text" class="filter-input" placeholder="Filter Gene"></th>
-                  <th><input type="text" class="filter-input" placeholder="Filter Organism"></th>
-                  <th><input type="text" class="filter-input" placeholder="Filter Domain"></th>
-                  <th><input type="text" class="filter-input" placeholder="Filter Reaction"></th>
-                  <th><input type="text" class="filter-input" placeholder="Filter Compound"></th>
-
-                </tr>
-              </thead>
-              <!-- 表格主体 -->
-              <tbody>
-                <!-- 静态数据行 -->
-                <tr>
-                  <td>taes</td>
-                  <td>E</td>
-                  <td>RO3460</td>
-                  <td>C00074</td>
-                  <td>9.7563</td>
-                </tr>
-                <tr>
-                  <td>taes</td>
-                  <td>E</td>
-                  <td>RO3460</td>
-                  <td>C00074</td>
-                  <td>9.7563</td>
-                </tr>
-                <tr>
-                  <td>taes</td>
-                  <td>E</td>
-                  <td>RO3460</td>
-                  <td>C00074</td>
-                  <td>9.7563</td>
-                </tr>
-                <tr>
-                  <td>taes</td>
-                  <td>E</td>
-                  <td>RO3460</td>
-                  <td>C00074</td>
-                  <td>9.7563</td>
-                </tr>
-                <tr>
-                  <td>taes</td>
-                  <td>E</td>
-                  <td>RO3460</td>
-                  <td>C00074</td>
-                  <td>9.7563</td>
-                </tr>
-                <tr>
-                  <td>taes</td>
-                  <td>E</td>
-                  <td>RO3460</td>
-                  <td>C00074</td>
-                  <td>9.7563</td>
-                </tr>
-                <tr>
-                  <td>taes</td>
-                  <td>E</td>
-                  <td>RO3460</td>
-                  <td>C00074</td>
-                  <td>9.7563</td>
-                </tr>
-                <!-- 更多静态数据行... -->
-              </tbody>
-            </table>
+        <div class="field columns">
+          <div class="column"></div>
+          <div class="column is-narrow">
+            <ExportTSV
+              :filename="`Product for ${productInfo?.product}.tsv`"
+              :format-function="formatToTSV"
+              :disabled="!genesData.length"
+            ></ExportTSV>
           </div>
         </div>
-      </div>
+        <gene-table :genes = genesData :columns = columnsData></gene-table>
       </div>
     </div>
   </template>
 
 <script>
 import axios from 'axios';
+import GeneTable from './table.vue';
+import ExportTSV from '@/components/shared/ExportTSV.vue';
 
 export default {
   name: 'ProductPage',
+  components: {
+    'gene-table':GeneTable,
+    ExportTSV,
+  },
   data() {
     return {
       productInfo: null, // 用于存储product的详细信息
       notFound: false,
+      genesData: [],
+      columnsData: [
+        { label: 'Product', field: 'product' },
+        { label: 'Doi', field: 'doi' },
+        { label: 'Organism', field: 'organism' },
+        { label: 'Gene', field: 'gene' },
+        { label: 'Product tilter', field: 'product_tilter' },
+        { label: 'Time', field: 'time' },
+      ]
     };
   },
   created() {
@@ -170,13 +112,39 @@ export default {
       axios.get(apiUrl)
         .then(response => {
           console.log("Complete response received:", response.data);
-          this.productInfo = response.data.productInfo; // 直接使用 response.data.keggRef
+          this.productInfo = response.data.productInfo;
           this.notFound = false;
+          this.genesData = response.data.data.map(entry => ({
+              doi: entry.doi,
+              gene: [
+                { type: 'Knock Out', value: entry.knock_out_gene || 'NA' },
+                { type: 'Overexpress', value: entry.overexpress_gene || 'NA' },
+                { type: 'Heterologous', value: entry.heterologous_gene || 'NA' }
+              ],
+              organism: entry.organism,
+              product: entry.product,
+              product_tilter: entry.product_titer,
+              time: entry.time
+            }));
         })
         .catch(error => {
           console.error('Error fetching gene details:', error);
           this.notFound = true;
         });
+    },
+    formatToTSV() {
+      let tsvContent = this.columnsData.map(col => col.label).join('\t') + '\n'; // 创建标题行
+      tsvContent += this.genesData.map(entry => {
+        return this.columnsData.map(column => {
+          if (column.field === 'gene') {
+            // 特殊处理gene字段，因为它是一个数组
+            return entry.gene.map(g => `${g.type}: ${g.value}`).join('; ');
+          } else {
+            return entry[column.field];
+          }
+        }).join('\t');
+      }).join('\n');
+      return tsvContent;
     }
   }
 };
