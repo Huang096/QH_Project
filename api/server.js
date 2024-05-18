@@ -72,7 +72,7 @@ app.get('/api/gene/:name', async (req, res) => {
 });
 
 app.get('/api/organism/:name', async (req, res) => {
-  console.log('API /api/gene/:name called with name:', req.params.name); // 确认路由被调用
+  console.log('API /api/organism/:name called with name:', req.params.name); // 确认路由被调用
   try {
     const name = decodeURIComponent(req.params.name);
     console.log('Received ORGANISM name:', name); // 输出解码后的名称
@@ -106,6 +106,7 @@ app.get('/api/product/:name', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 // 设置监听端口
 const port = process.env.PORT || 3000;

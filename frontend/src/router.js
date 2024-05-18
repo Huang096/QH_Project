@@ -113,13 +113,6 @@ const routes = [
       { path: 'product/:name', name: 'exampleroute-product', component: ProductPage}
     ]
   },
-  /*
-  {
-    path: '/test-gene-table',
-    name: 'testGeneTable',
-    component: testGeneTable
-  },
-  */
 
   // redirects
   {

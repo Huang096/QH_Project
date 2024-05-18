@@ -36,6 +36,7 @@
                 type="text"
                 placeholder="search (for genes, please provide the exact KEGG ID)"
                 @input="handleInputUpdate()"
+                @keyup="handleKeyUp($event)"
               />
               <span class="icon is-medium is-left">
                 <i class="fa fa-search is-primary"></i>
@@ -86,7 +87,7 @@
             <ul>
               <li>
                 doi (e.g.
-                <router-link :to="`/exampleroute/doi/${encodeURIComponent('10.1016/j.ymben.2013.09.007')}`">10.1016/j.ymben.2013.09.007</router-link>
+                <router-link :to="`/exampleroute/doi/${encodeURIComponent('10.1016.j.algal.2019.101702')}`">10.1016.j.algal.2019.101702</router-link>
                 )
               </li>
               <li>
@@ -121,6 +122,7 @@ import { default as messages } from '@/content/messages';
 import Citation from '@/components/about/Citation.vue';
 import { default as allCitations } from '@/content/citations';
 import ErrorPanel from '@/components/shared/ErrorPanel.vue';
+import router from '@/router';
 
 export default {
   name: 'ExampleNameLandingPage',
@@ -135,29 +137,39 @@ export default {
       searchTerm: '',
       searching: false,
       searchResults: [], // 假设搜索结果是一个对象数组，根据实际情况调整
-      errorMessage: ''
+      errorMessage: '',
+      debouncedTimer: null
     };
   },
-  created() {
-    // 使用 debounce 减少搜索时的请求频率
-    this.debouncedSearch = debounce(this.search, 300);
-  },
   methods: {
-    async search() {
-      this.searching = true; // 开始搜索
-      try {
-        const response = await axios.get('/api/search', { params: { query: this.searchTerm } });
-        this.searchResults = response.data; // 更新搜索结果
-      } catch (error) {
-        this.errorMessage = "搜索时发生错误"; // 设置错误消息
-      } finally {
-        this.searching = false; // 结束搜索
+
+    isDoi(input){
+      return input.startsWith('10.1');
+    },
+
+    handleInputUpdate() {
+      clearTimeout(this.debouncedTimer);  // 清除之前的计时器
+      this.debouncedTimer = setTimeout(() => {
+        this.executeSearch();  // 延迟执行
+      }, 2000);  // 2秒无新输入时执行
+    },
+
+    handleKeyUp(event) {
+      if (event.keyCode === 13) {  // 按下回车键
+        clearTimeout(this.debouncedTimer);  // 清除防抖计时器
+        this.executeSearch();  // 立即执行搜索
       }
     },
-    async handleInputUpdate() {
-      // 用户输入时触发搜索
-      this.searching = true;
-      await this.debouncedSearch();
+
+    executeSearch() {
+      // console.log('handleInputUpdate called with:', this.searchTerm);
+      if (this.isDoi(this.searchTerm)) {
+        router.push(`/exampleroute/doi/${encodeURIComponent(this.searchTerm)}`);
+      } else {
+        // 这里处理非 DOI 输入的逻辑，例如显示消息或进行其他类型的搜索
+        this.errorMessage = "请输入 DOI 或进行其他类型的查询";
+        // 可以在这里设置一个标志来显示错误或信息
+      }
     },
   },
 };
