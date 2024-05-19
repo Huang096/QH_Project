@@ -122,7 +122,8 @@ export default {
   },
   methods: {
     fetchOrgData() {
-      const apiUrl = `http://localhost:3000/api/organism/HA01`;
+      const encodedOrg = encodeURIComponent(this.$route.params.name); // 使用当前路由的参数
+      const apiUrl = `http://localhost:3000/api/organism/${encodedOrg}`;
       axios.get(apiUrl)
         .then(response => {
           console.log("Complete response received:", response.data);
