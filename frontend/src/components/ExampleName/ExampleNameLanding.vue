@@ -92,7 +92,7 @@
               </li>
               <li>
                 Gene (e.g.
-                <router-link to="/exampleroute/gene/xylitol">xylitol</router-link>
+                <router-link to="/exampleroute/gene/bpr">bpr</router-link>
                 )
               </li>
               <li>
