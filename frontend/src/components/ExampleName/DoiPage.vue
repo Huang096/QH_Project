@@ -111,7 +111,7 @@ export default {
                 { type: 'Overexpress', value: entry.overexpress_gene || 'NA' },
                 { type: 'Heterologous', value: entry.heterologous_gene || 'NA' }
               ],
-              organism: entry.organism,
+              organism: entry.strain,
               product: entry.product,
               product_tilter: entry.product_titer,
               time: entry.time
