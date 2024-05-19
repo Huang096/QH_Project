@@ -77,15 +77,16 @@
         </div>
       </div>
       <div class="field columns">
-          <div class="column"></div>
+        <div class="column"></div>
           <div class="column is-narrow">
             <ExportTSV
               :filename="`Product for ${productInfo?.product}.tsv`"
               :format-function="formatToTSV"
               :disabled="!genesData.length"
-            ></ExportTSV>
-          </div>
+            >
+          </ExportTSV>
         </div>
+      </div>
       <gene-table :genes = genesData :columns = columnsData></gene-table>
     </div>
   </div>
