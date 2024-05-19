@@ -108,7 +108,8 @@ export default {
   },
   methods: {
     fetchProductData() {
-      const apiUrl = `http://localhost:3000/api/product/isopropanol`;
+      const encodedGene = encodeURIComponent(this.$route.params.name);
+      const apiUrl = `http://localhost:3000/api/product/${encodedGene}`;
       axios.get(apiUrl)
         .then(response => {
           console.log("Complete response received:", response.data);

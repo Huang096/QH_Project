@@ -37,7 +37,7 @@
                   </td>
                   <td>{{ geneInfo.kegg }}</td>
                 </tr>
-                <h3 class="title is-3 title-no-wrap">Cross references</h3>
+                  <h3 class="title is-3 title-no-wrap no-wrap">Cross References</h3>
                 <tr>
                   <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                     NCBI Protein
@@ -150,3 +150,8 @@ export default {
 
 
 
+<style scoped>
+.no-wrap {
+  white-space: nowrap; /* Prevents wrapping to ensure the text stays in the same line */
+}
+</style>
