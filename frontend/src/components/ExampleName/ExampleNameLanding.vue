@@ -97,7 +97,7 @@
               </li>
               <li>
                 Organism (e.g.
-                <router-link to="/exampleroute/organism/Org1">Org1</router-link>
+                <router-link to="/exampleroute/organism/HA01">HA01</router-link>
                 )
               </li>
               <li>
@@ -123,6 +123,7 @@ import Citation from '@/components/about/Citation.vue';
 import { default as allCitations } from '@/content/citations';
 import ErrorPanel from '@/components/shared/ErrorPanel.vue';
 import router from '@/router';
+import axios from 'axios';
 
 export default {
   name: 'ExampleNameLandingPage',
@@ -147,6 +148,26 @@ export default {
       return input.startsWith('10.1');
     },
 
+    async isProduct(productName) {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/product/${encodeURIComponent(productName)}`);
+        return response.data && response.data.productInfo; // 检查返回的对象是否包含产品信息
+      } catch (error) {
+        console.error('Error checking if product:', error);
+        return false;
+      }
+    },
+
+    async isOrganism(productName) {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/organism/${encodeURIComponent(productName)}`);
+        return response.data && response.data.orgInfo; // 检查返回的对象是否包含产品信息
+      } catch (error) {
+        console.error('Error checking if product:', error);
+        return false;
+      }
+    },
+
     handleInputUpdate() {
       clearTimeout(this.debouncedTimer);  // 清除之前的计时器
       this.debouncedTimer = setTimeout(() => {
@@ -161,11 +182,18 @@ export default {
       }
     },
 
-    executeSearch() {
+    async executeSearch() {
       // console.log('handleInputUpdate called with:', this.searchTerm);
       if (this.isDoi(this.searchTerm)) {
         router.push(`/exampleroute/doi/${encodeURIComponent(this.searchTerm)}`);
-      } else {
+      }
+      else if (await this.isProduct(this.searchTerm)) {
+        router.push(`/exampleroute/product/${encodeURIComponent(this.searchTerm)}`);
+      }
+      else if (await this.isOrganism(this.searchTerm)) {
+        router.push(`/exampleroute/organism/${encodeURIComponent(this.searchTerm)}`);
+      }
+      else {
         // 这里处理非 DOI 输入的逻辑，例如显示消息或进行其他类型的搜索
         this.errorMessage = "请输入 DOI 或进行其他类型的查询";
         // 可以在这里设置一个标志来显示错误或信息

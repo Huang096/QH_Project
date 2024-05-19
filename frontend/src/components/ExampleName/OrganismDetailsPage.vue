@@ -108,7 +108,7 @@ export default {
       notFound: false,
       genesData: [],
       columnsData: [
-        { label: 'Organism', field: 'organism' },
+        { label: 'Organism', field: 'strain' },
         { label: 'Product', field: 'product' },
         { label: 'Doi', field: 'doi' },
         { label: 'Gene', field: 'gene' },
@@ -122,14 +122,14 @@ export default {
   },
   methods: {
     fetchOrgData() {
-      const apiUrl = `http://localhost:3000/api/organism/Org1`;
+      const apiUrl = `http://localhost:3000/api/organism/HA01`;
       axios.get(apiUrl)
         .then(response => {
           console.log("Complete response received:", response.data);
           this.orgInfo = response.data.orgInfo; // 直接使用 response.data.keggRef
           this.notFound = false;
           this.genesData = response.data.data.map(entry => ({
-              organism: entry.organism,
+              strain: entry.strain,
               doi: entry.doi,
               gene: [
                 { type: 'Knock Out', value: entry.knock_out_gene || 'NA' },

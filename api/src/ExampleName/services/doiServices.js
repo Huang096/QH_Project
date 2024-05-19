@@ -67,10 +67,10 @@ async function getGeneDataFromDB(productName, pool) {
 
 async function getOrganismDataFromDB(orgName, pool) {
     try {
-        const organismQuery = 'SELECT * FROM orginfo WHERE TRIM(organism) = TRIM($1)';
+        const organismQuery = 'SELECT * FROM orginfo WHERE LOWER(organism) = TRIM(LOWER($1));        ';
         const organismResults = await pool.query(organismQuery, [orgName]);
 
-        const dataQuery = 'SELECT * FROM data WHERE TRIM(organism) = TRIM($1)';
+        const dataQuery = 'SELECT * FROM data WHERE TRIM(strain) = TRIM($1)';
         const dataResults = await pool.query(dataQuery, [orgName]);
 
         console.log('Organism Results:', organismResults.rows);
