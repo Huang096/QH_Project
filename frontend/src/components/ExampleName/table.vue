@@ -35,7 +35,7 @@
       <template v-slot:table-row="{ row, column }">
         <span v-if="column.field === 'gene'">
           <!-- 特殊处理 gene 列 -->
-          <span v-for="geneInfo in row.gene" :key="geneInfo.type" :style="{ color: getGeneColor(geneInfo.type) }">
+          <span v-for="geneInfo in row.gene" :key="geneInfo.type" :style="{ color: getGeneColor(geneInfo.type) }" :title="`${geneInfo.type} Gene`">
             {{ geneInfo.value }}<span v-if="geneInfo !== row.gene[row.gene.length - 1]">; </span>
           </span>
         </span>

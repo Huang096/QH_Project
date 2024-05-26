@@ -16,7 +16,7 @@ License for the specific language governing permissions and // limitations under
         </div>
       </div>
       <div v-else-if="article">
-        <h3 class="title is-3">DOI: {{ article.doi }}</h3>
+        <h3 class="title is-3">Title: {{ article.title }}</h3>
         <div class="columns">
           <div class="table-template column is-8-desktop">
             <div class="table-container">
@@ -26,8 +26,8 @@ License for the specific language governing permissions and // limitations under
                   <td>{{ article.time || 'NA' }}</td>
                 </tr>
                 <tr>
-                  <td class="td-key has-background-primary has-text-white-bis is-capitalized">Title</td>
-                  <td>{{ article.title || 'NA' }}</td>
+                  <td class="td-key has-background-primary has-text-white-bis is-capitalized">Doi</td>
+                  <td>{{ article.doi || 'NA' }}</td>
                 </tr>
                 <tr>
                   <td class="td-key has-background-primary has-text-white-bis is-capitalized">Key words</td>
