@@ -18,10 +18,10 @@ const router = express.Router();
 
 router.get('/doi/:id', async (req, res) => {
   try {
-    const doi = decodeURIComponent(req.params.id);
+    const pmid = decodeURIComponent(req.params.id);
     console.log('Received DOI:', req.params.id); // 查看原始接收的DOI
-    console.log('Decoded DOI:', doi); // 查看解码后的DOI
-    const articleDetail = await getDoiDataFromDB(doi);
+    console.log('Decoded DOI:', pmid); // 查看解码后的DOI
+    const articleDetail = await getDoiDataFromDB(pmid);
     console.log('Article Detail:', articleDetail); // 打印查询结果
     if (articleDetail) {
       res.json(articleDetail);

@@ -107,7 +107,7 @@ const routes = [
     path:'/exampleroute',
     children: [
       { path: '', name: 'exampleroute', component: ExampleNameLanding},
-      { path: 'doi/:id', name: 'exampleroute-doi', component: DoiPage},
+      { path: 'pmid/:id', name: 'exampleroute-doi', component: DoiPage},
       { path: 'organism/:name', name: 'exampleroute-organism', component: OrganismPage},
       { path: 'gene/:name', name: 'exampleroute-gene', component: GenePage},
       { path: 'product/:name', name: 'exampleroute-product', component: ProductPage}

@@ -94,7 +94,7 @@ export default {
         { label: 'Gene', field: 'gene' },
         { label: 'Organism', field: 'strain' },
         { label: 'Product', field: 'product' },
-        { label: 'Doi', field: 'doi' },
+        { label: 'Pmid', field: 'doi' },
         { label: 'Product tilter', field: 'product_tilter' },
         { label: 'Time', field: 'time' },
       ]

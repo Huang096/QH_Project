@@ -36,11 +36,11 @@ const pool = new Pool({
   port: 5432,
 });
 
-app.get('/api/doi/:id', async (req, res) => {
+app.get('/api/pmid/:id', async (req, res) => {
   try {
-    const doi = decodeURIComponent(req.params.id);
+    const pmid = decodeURIComponent(req.params.id);
     // console.log('Decoded DOI:', doi);
-    const result = await getDoiDataFromDB(doi, pool);
+    const result = await getDoiDataFromDB(pmid, pool);
     // console.log('Complete result:', result);
     if (result.article) {
       res.json(result);

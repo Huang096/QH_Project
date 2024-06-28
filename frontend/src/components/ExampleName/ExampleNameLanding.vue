@@ -86,8 +86,8 @@ limitations under the License.
             <h5 class="title is-5">One can search for a:</h5>
             <ul>
               <li>
-                doi (e.g.
-                <router-link :to="`/exampleroute/doi/${encodeURIComponent('10.1016.j.ymben.2013.09.007')}`">10.1016.j.ymben.2013.09.007</router-link>
+                Pmid (e.g.
+                <router-link :to="`/exampleroute/pmid/${encodeURIComponent('35350620')}`">35350620</router-link>
                 )
               </li>
               <li>

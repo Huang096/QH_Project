@@ -111,7 +111,7 @@ export default {
       columnsData: [
         { label: 'Organism', field: 'strain' },
         { label: 'Product', field: 'product' },
-        { label: 'Doi', field: 'doi' },
+        { label: 'Pmid', field: 'doi' },
         { label: 'Gene', field: 'gene' },
         { label: 'Product tilter', field: 'product_tilter' },
         { label: 'Time', field: 'time' },
@@ -132,7 +132,8 @@ export default {
           this.notFound = false;
           this.genesData = response.data.data.map(entry => ({
               strain: entry.strain,
-              doi: entry.doi,
+              doi: entry.pmid || "NA",
+              //doi: entry.doi,
               gene: [
                 { type: 'Knock Out', value: entry.knock_out_gene || 'NA' },
                 { type: 'Overexpress', value: entry.overexpress_gene || 'NA' },

@@ -95,7 +95,7 @@ export default {
       genesData: [],
       columnsData: [
         { label: 'Product', field: 'product' },
-        { label: 'Doi', field: 'doi' },
+        { label: 'Pmid', field: 'doi' },
         { label: 'Organism', field: 'organism' },
         { label: 'Gene', field: 'gene' },
         { label: 'Product tilter', field: 'product_tilter' },
@@ -116,6 +116,7 @@ export default {
           this.productInfo = response.data.productInfo;
           this.notFound = false;
           this.genesData = response.data.data.map(entry => ({
+              // doi: entry.pmid || "NA",
               doi: entry.doi,
               gene: [
                 { type: 'Knock Out', value: entry.knock_out_gene || 'NA' },

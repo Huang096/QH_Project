@@ -26,8 +26,8 @@ License for the specific language governing permissions and // limitations under
                   <td>{{ article.time || 'NA' }}</td>
                 </tr>
                 <tr>
-                  <td class="td-key has-background-primary has-text-white-bis is-capitalized">Doi</td>
-                  <td>{{ article.doi || 'NA' }}</td>
+                  <td class="td-key has-background-primary has-text-white-bis is-capitalized">PMID</td>
+                  <td>{{ pmid || 'NA' }}</td>
                 </tr>
                 <tr>
                   <td class="td-key has-background-primary has-text-white-bis is-capitalized">Key words</td>
@@ -77,7 +77,7 @@ export default {
       notFound: false,
       genesData: [],
       columnsData: [
-        { label: 'Doi', field: 'doi' },
+        { label: 'Pmid', field: 'doi' },
         { label: 'Organism', field: 'organism' },
         { label: 'Gene', field: 'gene' },
         { label: 'Product', field: 'product' },
@@ -93,7 +93,7 @@ export default {
     fetchArticleData() {
       const encodedDoi = encodeURIComponent(this.$route.params.id);
       console.log('Encoded DOI:', encodedDoi);
-      const apiUrl = `http://localhost:3000/api/doi/${encodedDoi}`;
+      const apiUrl = `http://localhost:3000/api/pmid/${encodedDoi}`;
       axios.get(apiUrl)
         .then(response => {
           console.log("Complete response received:", response.data);
@@ -103,9 +103,13 @@ export default {
             console.log('Genes Data:', this.genesData);
             console.log('Columns Data:', this.columnsData);
             this.article = response.data.article;
-            this.cardData = response.data.data;
+            this.pmid = response.data.pmid;
+            this.cardData = response.data.data.map(entry => ({
+                ...entry,
+                doi: this.pmid  // 将每个 entry 的 doi 替换为 pmid
+            }));
             this.genesData = response.data.data.map(entry => ({
-              doi: entry.doi,
+              doi: this.pmid,
               gene: [
                 { type: 'Knock Out', value: entry.knock_out_gene || 'NA' },
                 { type: 'Overexpress', value: entry.overexpress_gene || 'NA' },
