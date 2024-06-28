@@ -18,6 +18,8 @@ async function getDoiDataFromDB(pmid, pool) {
     const pmidQuery = 'SELECT doi FROM doitopmid WHERE TRIM(pmid) = TRIM($1)';
     const pmidResults = await pool.query(pmidQuery, [pmid]);
 
+    console.log('PMID Query Results:', pmidResults.rows);
+
     if (pmidResults.rows.length === 0) {
       throw new Error('No matching DOI found for the given PMID');
     }
@@ -28,9 +30,13 @@ async function getDoiDataFromDB(pmid, pool) {
       'SELECT * FROM article_detail WHERE TRIM(doi) = TRIM($1)';
     const articleResults = await pool.query(articleQuery, [doiId]);
 
+    console.log('Article Query Results:', articleResults.rows);
+
     // 查询第二个表，可能返回多条记录
     const dataQuery = 'SELECT * FROM data WHERE TRIM(doi) = TRIM($1)';
     const dataResults = await pool.query(dataQuery, [doiId]);
+
+    console.log('Data Query Results:', dataResults.rows);
 
     // 组合结果
     const article = articleResults.rows[0]; // 取第一条记录
