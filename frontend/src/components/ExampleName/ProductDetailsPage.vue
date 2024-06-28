@@ -60,6 +60,9 @@
                 </table>
               </div>
             </div>
+            <div class="column is-4 has-text-centered">
+              <RDKitImage v-if="productDetail?.smiles" :smiles="productDetail.smiles" />
+            </div>
           </div>
         </div>
         <div class="field columns">
@@ -81,12 +84,15 @@
 import axios from 'axios';
 import GeneTable from './table.vue';
 import ExportTSV from '@/components/shared/ExportTSV.vue';
+import RDKitImage from '@/components/shared/RDKitImage.vue';
+
 
 export default {
   name: 'ProductPage',
   components: {
     'gene-table':GeneTable,
     ExportTSV,
+    RDKitImage,
   },
   data() {
     return {
@@ -152,3 +158,20 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.section.extended-section .columns {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.table-container {
+  margin-bottom: 1rem;
+}
+
+.column.is-4.has-text-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
