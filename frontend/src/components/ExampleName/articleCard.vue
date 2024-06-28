@@ -68,6 +68,7 @@ export default {
     },
     methods: {
         formatLabel(key) {
+            if (key === 'doi') return 'Pmid';
             return key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         }
     }
