@@ -144,8 +144,9 @@ export default {
   },
   methods: {
 
-    isDoi(input){
-      return input.startsWith('10.1');
+    isPmid(input) {
+      const pmidPattern = /^\d{8}$/;
+      return pmidPattern.test(input);
     },
 
     async isProduct(productName) {
@@ -168,6 +169,16 @@ export default {
       }
     },
 
+    async isGene(geneName) {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/gene/${encodeURIComponent(geneName)}`);
+        return response.data && response.data.geneInfo; // 检查返回的对象是否包含基因信息
+      } catch (error) {
+        console.error('Error checking if gene:', error);
+        return false;
+      }
+    },
+
     handleInputUpdate() {
       clearTimeout(this.debouncedTimer);  // 清除之前的计时器
       this.debouncedTimer = setTimeout(() => {
@@ -184,8 +195,8 @@ export default {
 
     async executeSearch() {
       // console.log('handleInputUpdate called with:', this.searchTerm);
-      if (this.isDoi(this.searchTerm)) {
-        router.push(`/exampleroute/doi/${encodeURIComponent(this.searchTerm)}`);
+      if (this.isPmid(this.searchTerm)) {
+        router.push(`/exampleroute/pmid/${encodeURIComponent(this.searchTerm)}`);
       }
       else if (await this.isProduct(this.searchTerm)) {
         router.push(`/exampleroute/product/${encodeURIComponent(this.searchTerm)}`);
@@ -193,9 +204,12 @@ export default {
       else if (await this.isOrganism(this.searchTerm)) {
         router.push(`/exampleroute/organism/${encodeURIComponent(this.searchTerm)}`);
       }
+      else if (await this.isGene(this.searchTerm)){
+        router.push(`/exampleroute/gene/${encodeURIComponent(this.searchTerm)}`);
+      }
       else {
         // 这里处理非 DOI 输入的逻辑，例如显示消息或进行其他类型的搜索
-        this.errorMessage = "请输入 DOI 或进行其他类型的查询";
+        this.errorMessage = "请输入 Pmid 或进行其他类型的查询";
         // 可以在这里设置一个标志来显示错误或信息
       }
     },
