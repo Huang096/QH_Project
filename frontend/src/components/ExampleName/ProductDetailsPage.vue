@@ -49,13 +49,13 @@
                     <td class="td-key has-background-primary has-text-white-bis is-capitalized">
                       MetaNetx
                     </td>
-                    <td>{{ productInfo?.meta }}</td>
+                    <td>{{ productDetail?.metanetx }}</td>
                   </tr>
                   <tr>
                     <td class="td-key has-background-primary has-text-white-bis is-capitalized">
-                      SMILLS
+                      SMILES
                     </td>
-                    <td>{{ productInfo?.smills }}</td>
+                    <td>{{ productDetail?.smiles }}</td>
                   </tr>
                 </table>
               </div>
@@ -112,8 +112,9 @@ export default {
       const apiUrl = `http://localhost:3000/api/product/${encodedGene}`;
       axios.get(apiUrl)
         .then(response => {
-          console.log("Complete response received:", response.data);
+          //console.log("Complete response received:", response.data);
           this.productInfo = response.data.productInfo;
+          this.productDetail = response.data.productDetail
           this.notFound = false;
           this.genesData = response.data.data.map(entry => ({
               // doi: entry.pmid || "NA",

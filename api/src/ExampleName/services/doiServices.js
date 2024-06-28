@@ -157,6 +157,12 @@ async function getProductDataFromDB(productName, pool) {
       'SELECT * FROM productinfo WHERE TRIM(product) = TRIM($1)';
     const productResults = await pool.query(productQuery, [productName]);
 
+    const productDetailQuery =
+      'SELECT * FROM productdata WHERE TRIM(product) = TRIM($1)';
+    const productDetailResults = await pool.query(productDetailQuery, [
+      productName,
+    ]);
+
     const dataQuery = 'SELECT * FROM data WHERE TRIM(product) = TRIM($1)';
     const dataResults = await pool.query(dataQuery, [productName]);
 
@@ -174,6 +180,7 @@ async function getProductDataFromDB(productName, pool) {
 
     // 组合结果
     const productInfo = productResults.rows[0]; // 取第一条记录
+    const productDetail = productDetailResults.rows[0];
     const productData = dataResults.rows.map(row => ({
       ...row,
       doi: doiToPmidMap[row.doi] || row.doi, // 将 doi 替换为 pmid，如果找不到 pmid，则保持原来的 doi
@@ -181,6 +188,7 @@ async function getProductDataFromDB(productName, pool) {
 
     return {
       productInfo,
+      productDetail,
       data: productData,
     };
   } catch (err) {
